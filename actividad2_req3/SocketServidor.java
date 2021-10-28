@@ -9,17 +9,10 @@ import java.util.ArrayList;
 public class SocketServidor {
 
 	public static final int PUERTO = 2017;
-	int peticiones = 0;
+	private int peticiones = 0;
 	private InetSocketAddress direccion;
 	private Socket socketAlCliente;
-
-	Libro libro1 = new Libro("001", "titulo1", "Autor1", 1.00);
-	Libro libro2 = new Libro("002", "titulo2", "Autor2", 2.00);
-	Libro libro3 = new Libro("003", "titulo3", "Autor3", 3.00);
-	Libro libro4 = new Libro("004", "titulo4", "Autor3", 4.00);
-	Libro libro5 = new Libro("005", "titulo5", "Autor5", 5.00);
-
-	public static ArrayList<Libro> bibliotecaPrincipal = new ArrayList<Libro>();
+	public static ArrayList<Libro> bibliotecaPrincipal;
 
 	/**
 	 * El metodo recoge la logica por parte del servidor en cuanto al envio y
@@ -28,7 +21,14 @@ public class SocketServidor {
 	 * @throws IOException
 	 */
 	public void funcionDelServidor() throws IOException {
+		
 
+		Libro libro1 = new Libro("001", "titulo1", "Autor1", 1.00);
+		Libro libro2 = new Libro("002", "titulo2", "Autor2", 2.00);
+		Libro libro3 = new Libro("003", "titulo3", "Autor3", 3.00);
+		Libro libro4 = new Libro("004", "titulo4", "Autor3", 4.00);
+		Libro libro5 = new Libro("005", "titulo5", "Autor5", 5.00);
+		bibliotecaPrincipal = new ArrayList<Libro>();
 		bibliotecaPrincipal.add(libro1);
 		bibliotecaPrincipal.add(libro2);
 		bibliotecaPrincipal.add(libro3);
@@ -43,7 +43,7 @@ public class SocketServidor {
 			direccion = new InetSocketAddress(PUERTO);
 			serverSocket.bind(direccion);
 
-			System.out.println("Esperando peticiones por el puerto " + PUERTO);
+			System.out.println("Esperando peticiones por el puerto " + PUERTO + "\n");
 
 			// Permite que el servidor este escuchando siempre peticiones, a no ser que
 			// paremos el programa.
@@ -52,14 +52,17 @@ public class SocketServidor {
 				// y devuelve un transmisor para el intercambio de informacion
 				socketAlCliente = serverSocket.accept();
 
-				System.out.println("Se ha aceptado la peticion numero" + ++peticiones);
+				System.out.println("Se ha aceptado la peticion numero" + " " + ++peticiones);
 				// Cada vez que haya una peticion se creara un nuevo hilo de ejecucion que, con
 				// lo que se puede trabajar en multitarea.
 				new HiloDevolverLibro(socketAlCliente).start();
 			}
 
 		} catch (IOException e) {
-			System.out.println("Se ha generado la excepcion " + e);
+			System.err.println("SERVIDOR: Error de entrada/salida");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("SERVIDOR: Error");
 			e.printStackTrace();
 		}
 	}

@@ -48,16 +48,16 @@ public class ProcesadoInformacion {
 	 */
 	public void procesarInformacionDeServidor(String informacionRecibida) {
 
-		System.out.println("\nLa informacion solicitada es la siguiente:");
+		System.out.println("\nLa informacion solicitada es la siguiente:\n");
 		if (informacionRecibida != "") {
 			arrayDatoDevuelto = informacionRecibida.split("-");
 
 			for (int i = 0; i < arrayDatoDevuelto.length; i++) {
 				System.out.println("Libro " + (i + 1));
-				System.out.println(arrayDatoDevuelto[i]);
+				System.out.println(arrayDatoDevuelto[i] + "\n");
 			}
 		} else {
-			System.out.println("No hay libros con la caracteristica elegida");
+			System.out.println("No hay libros con la caracteristica elegida\n");
 		}
 
 	}

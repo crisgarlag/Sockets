@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -31,7 +32,7 @@ public class SocketCliente {
 
 		int eleccion = 0;
 		boolean opcionIncorrecta = false;
-		;
+
 
 		System.out.println("---------MENU DE LA BIBLIOTECA---------\n");
 		System.out.println("Seleecione una de las siguientes opciones.");
@@ -123,8 +124,9 @@ public class SocketCliente {
 		try {
 
 			int eleccionClienteMenu = menu();
-			
-			//Permite que el cliente siga realizando peticiones hasta que el usuario indique la opcion 5.- Salir de la aplicacion
+
+			// Permite que el cliente siga realizando peticiones hasta que el usuario
+			// indique la opcion 5.- Salir de la aplicacion
 			while (eleccionClienteMenu != 5) {
 
 				String informacionEnvio = indicarInformacionEnvio(eleccionClienteMenu);
@@ -134,7 +136,7 @@ public class SocketCliente {
 
 				socketAlServidor = new Socket();
 				socketAlServidor.connect(direccion);
-				System.out.println("Conexion establecida con el servidor por el puerto " + PUERTO + " y direccion IP "
+				System.out.println("\nConexion establecida con el servidor por el puerto " + PUERTO + " y direccion IP "
 						+ IP_SERVER);
 
 				// Se inicializa la variable salida para enviar informacion al servidor.
@@ -152,9 +154,8 @@ public class SocketCliente {
 
 				bfr = new BufferedReader(entrada);
 				String datoDevuelto = bfr.readLine();
-				procesadoInformación=new ProcesadoInformacion();
+				procesadoInformación = new ProcesadoInformacion();
 				procesadoInformación.procesarInformacionDeServidor(datoDevuelto);
-				
 
 				// Se cierra el socket
 
@@ -165,8 +166,14 @@ public class SocketCliente {
 			}
 			System.out.println("Fin de la aplicacion");
 
+		} catch (UnknownHostException e) {
+			System.err.println("CLIENTE: No encuentro el servidor en la dirección" + IP_SERVER);
+			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("La excepcion es " + e);
+			System.err.println("CLIENTE: Error de entrada/salida");
+			e.printStackTrace();
+		} catch (Exception e) {
+			System.err.println("CLIENTE: Error -> " + e);
 			e.printStackTrace();
 		}
 		sc.close();
