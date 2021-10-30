@@ -70,21 +70,21 @@ public class HiloDevolverLibro extends Thread {
 
 					switch (codigoBusqueda) {
 					case "ISBN":
-						if (datoBusqueda.equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getISBN())) {
+						if (datoBusqueda.trim().equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getISBN())) {
 							libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
 							bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
 						}
 						break;
 
 					case "Titulo":
-						if (datoBusqueda.equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getTitulo())) {
+						if (datoBusqueda.trim().equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getTitulo())) {
 							libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
 							bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
 						}
 						break;
 
 					case "Autor":
-						if (datoBusqueda.equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getAutor())) {
+						if (datoBusqueda.trim().equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getAutor())) {
 							libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
 							bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
 						}
