@@ -151,6 +151,7 @@ public class SocketCliente {
 				bfr = new BufferedReader(entrada);
 				datoDevuelto = bfr.readLine();
 				procesadoInformación = new ProcesadoInformacion();
+
 				procesadoInformación.procesarInformacionDelServidor(datoDevuelto);
 
 				// Se cierra el socket

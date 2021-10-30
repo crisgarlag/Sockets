@@ -15,6 +15,11 @@ public class HiloDevolverLibro extends Thread {
 	private BufferedReader bfr;
 	private ProcesadoInformacion procesadoInformación;
 
+	/**
+	 * Constructor
+	 * 
+	 * @param socketAlCliente
+	 */
 	public HiloDevolverLibro(Socket socketAlCliente) {
 
 		this.socketAlCliente = socketAlCliente;
@@ -26,9 +31,7 @@ public class HiloDevolverLibro extends Thread {
 	 */
 	public void run() {
 
-		Libro libroDevueltoDeBiblioteca = null;
 		ArrayList<Libro> bibliotecaDevueltaACliente = new ArrayList<Libro>();
-		Libro libroAñadidoABiblioteca;
 		String stringRecibidoDelCliente;
 		String[] stringRecibidoDelClienteConvertidoArray;
 		String codigoBusqueda;
@@ -42,6 +45,7 @@ public class HiloDevolverLibro extends Thread {
 			entrada = new InputStreamReader(socketAlCliente.getInputStream());
 			bfr = new BufferedReader(entrada);
 			salida = new PrintStream(socketAlCliente.getOutputStream());
+			procesadoInformación = new ProcesadoInformacion();
 
 			stringRecibidoDelCliente = bfr.readLine();
 
@@ -53,49 +57,25 @@ public class HiloDevolverLibro extends Thread {
 			datoBusqueda = stringRecibidoDelClienteConvertidoArray[1];
 
 			if (codigoBusqueda.equals("Añadir")) {
-				Double precio;
-				libroAñadidoABiblioteca = new Libro();
-				libroAñadidoABiblioteca.setISBN(stringRecibidoDelClienteConvertidoArray[1]);
-				libroAñadidoABiblioteca.setTitulo(stringRecibidoDelClienteConvertidoArray[2]);
-				libroAñadidoABiblioteca.setAutor(stringRecibidoDelClienteConvertidoArray[3]);
-				precio = Double.parseDouble(stringRecibidoDelClienteConvertidoArray[4]);
-				libroAñadidoABiblioteca.setPrecio(precio);
-
-				SocketServidor.bibliotecaPrincipal.add(libroAñadidoABiblioteca);
+				procesadoInformación.añadirLibro(stringRecibidoDelClienteConvertidoArray);
 				salida.println("Libro añadido correctamente\n");
-				System.out.println("Se ha añadido un libro a la biblioteca.\n");
+
 			} else {
+				switch (codigoBusqueda) {
+				case "ISBN":
+					bibliotecaDevueltaACliente = procesadoInformación.buscarPorISBN(datoBusqueda);
+					break;
 
-				for (int i = 0; i < SocketServidor.bibliotecaPrincipal.size(); i++) {
+				case "Titulo":
+					bibliotecaDevueltaACliente = procesadoInformación.buscarPorTitulo(datoBusqueda);
+					break;
 
-					switch (codigoBusqueda) {
-					case "ISBN":
-						if (datoBusqueda.trim().equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getISBN())) {
-							libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
-							bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
-						}
-						break;
-
-					case "Titulo":
-						if (datoBusqueda.trim().equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getTitulo())) {
-							libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
-							bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
-						}
-						break;
-
-					case "Autor":
-						if (datoBusqueda.trim().equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getAutor())) {
-							libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
-							bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
-						}
-						break;
-					}
+				case "Autor":
+					bibliotecaDevueltaACliente = procesadoInformación.buscarPorAutor(datoBusqueda);
+					break;
 				}
 
-				procesadoInformación = new ProcesadoInformacion();
 				textoDevuelto = procesadoInformación.procesarInformacionAlCliente(bibliotecaDevueltaACliente);
-
-				
 
 				if (textoDevuelto != "") {
 					salida.println(textoDevuelto);
@@ -106,7 +86,6 @@ public class HiloDevolverLibro extends Thread {
 				}
 			}
 
-			libroDevueltoDeBiblioteca = null;
 			bibliotecaDevueltaACliente.clear();
 			;
 

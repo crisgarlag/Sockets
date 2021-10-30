@@ -1,7 +1,4 @@
 package actividad2_Definitiva;
-
-
-
 import java.util.ArrayList;
 
 public class ProcesadoInformacion {
@@ -13,7 +10,13 @@ public class ProcesadoInformacion {
 	private String autor;
 	private String precio;
 	private String[] arrayDatoDevuelto;
-
+	private Libro libroDevueltoDeBiblioteca;
+	private Libro libroAñadidoABiblioteca;
+	private ArrayList<Libro> bibliotecaDevueltaACliente;
+	
+	public ProcesadoInformacion() {
+		bibliotecaDevueltaACliente= new ArrayList<Libro>();
+	}
 
 	/**
 	 * Transforma la informacion solicitada por el cliente para ser enviada por el
@@ -60,4 +63,52 @@ public class ProcesadoInformacion {
 		}
 
 	}
+//PENDIENTE
+	public void añadirLibro(String [] datosRecibidosCliente ) {
+
+		Double precio;
+		libroAñadidoABiblioteca = new Libro();
+		libroAñadidoABiblioteca.setISBN(datosRecibidosCliente[1]);
+		libroAñadidoABiblioteca.setTitulo(datosRecibidosCliente[2]);
+		libroAñadidoABiblioteca.setAutor(datosRecibidosCliente[3]);
+		precio = Double.parseDouble(datosRecibidosCliente[4]);
+		libroAñadidoABiblioteca.setPrecio(precio);
+
+		SocketServidor.bibliotecaPrincipal.add(libroAñadidoABiblioteca);
+		
+		System.out.println("Se ha añadido un libro a la biblioteca.\n");
+
+	}
+
+	public ArrayList<Libro> buscarPorISBN(String datoBusqueda) {
+		for (int i = 0; i < SocketServidor.bibliotecaPrincipal.size(); i++) {
+			if (datoBusqueda.equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getISBN())) {
+				libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
+				bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
+			}
+		}
+		return bibliotecaDevueltaACliente;
+	}
+
+	public ArrayList<Libro> buscarPorTitulo(String datoBusqueda) {
+		for (int i = 0; i < SocketServidor.bibliotecaPrincipal.size(); i++) {
+			if (datoBusqueda.equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getTitulo())) {
+				libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
+				bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
+			}
+		}
+		return bibliotecaDevueltaACliente;
+	}
+
+	public ArrayList<Libro> buscarPorAutor(String datoBusqueda) {
+		for (int i = 0; i < SocketServidor.bibliotecaPrincipal.size(); i++) {
+			if (datoBusqueda.equalsIgnoreCase(SocketServidor.bibliotecaPrincipal.get(i).getAutor())) {
+				libroDevueltoDeBiblioteca = SocketServidor.bibliotecaPrincipal.get(i);
+				bibliotecaDevueltaACliente.add(libroDevueltoDeBiblioteca);
+			}
+		}
+		return bibliotecaDevueltaACliente;
+	}
 }
+
+
