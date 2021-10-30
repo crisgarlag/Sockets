@@ -63,7 +63,7 @@ public class ProcesadoInformacion {
 		}
 
 	}
-//PENDIENTE
+
 	public void añadirLibro(String [] datosRecibidosCliente ) {
 
 		Double precio;
